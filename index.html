@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#182134">
+<title>S Optimization — лицензии</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+  :root {
+    --page: #f4f6fa;
+    --card: #ffffff;
+    --border: #dfe5ee;
+    --ink: #26303c;
+    --muted: #7a8698;
+    --green: #277a33;
+    --green-dark: #1d6029;
+    --dark: #182134;
+    --red: #b02a24;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0; background: var(--page); color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 16px; line-height: 1.45;
+  }
+  body { padding-bottom: env(safe-area-inset-bottom); }
+
+  header {
+    background: var(--dark); color: #fff;
+    padding: 18px 18px 16px; padding-top: calc(18px + env(safe-area-inset-top));
+    display: flex; align-items: center; gap: 14px;
+  }
+  header img { width: 44px; height: 44px; border-radius: 10px; }
+  header h1 { font-size: 19px; margin: 0; font-weight: 700; letter-spacing: .2px; }
+  header p { margin: 2px 0 0; font-size: 12.5px; color: #9fb0c8; }
+
+  main { padding: 16px; max-width: 560px; margin: 0 auto; }
+
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 16px; margin-bottom: 14px;
+  }
+  .card h2 {
+    font-size: 12px; text-transform: uppercase; letter-spacing: .6px;
+    color: var(--muted); margin: 0 0 12px; font-weight: 700;
+  }
+  label { display: block; font-size: 13.5px; font-weight: 600; margin: 0 0 6px; }
+  input, textarea {
+    width: 100%; padding: 12px 13px; font-size: 16px; color: var(--ink);
+    background: #fff; border: 1px solid var(--border); border-radius: 10px;
+    outline: none; font-family: inherit;
+  }
+  input:focus, textarea:focus { border-color: #7ea6d8; box-shadow: 0 0 0 3px rgba(61,130,206,.15); }
+  input.mono, textarea.mono { font-family: ui-monospace, Consolas, monospace; letter-spacing: .3px; }
+  textarea { resize: vertical; min-height: 96px; }
+  .field { margin-bottom: 14px; }
+  .hint { font-size: 12.5px; color: var(--muted); margin: 6px 0 0; }
+
+  button {
+    width: 100%; border: 0; border-radius: 12px; padding: 15px;
+    font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer;
+    background: #fff; color: var(--ink); border: 1px solid var(--border);
+  }
+  button.primary { background: var(--green); color: #fff; border-color: transparent; }
+  button.primary:active { background: var(--green-dark); }
+  button.ghost { background: #fff; }
+  button:disabled { opacity: .5; }
+  .row { display: flex; gap: 10px; }
+  .row > * { flex: 1; }
+
+  .status { font-size: 13.5px; margin: 10px 0 0; min-height: 19px; }
+  .status.err { color: var(--red); }
+  .status.ok { color: var(--green); }
+
+  pre.license {
+    background: #1e2430; color: #dee4ee; border-radius: 12px; padding: 14px;
+    font-family: ui-monospace, Consolas, monospace; font-size: 11.5px;
+    line-height: 1.5; white-space: pre-wrap; word-break: break-all;
+    max-height: 210px; overflow: auto; margin: 0 0 12px;
+  }
+
+  .log-item {
+    font-size: 12.5px; color: var(--muted); padding: 8px 0;
+    border-bottom: 1px solid #eef1f6;
+  }
+  .log-item:last-child { border-bottom: 0; }
+  .log-item b { color: var(--ink); font-weight: 600; }
+
+  .hidden { display: none !important; }
+  .center { text-align: center; }
+  .mt { margin-top: 12px; }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="icon-192.png" alt="">
+  <div>
+    <h1>S Optimization</h1>
+    <p>Выпуск лицензий</p>
+  </div>
+</header>
+
+<main>
+
+  <!-- ЭКРАН 1: первый запуск, загрузка ключа -->
+  <section id="screen-setup" class="hidden">
+    <div class="card">
+      <h2>Настройка</h2>
+      <p class="hint" style="margin-top:0">
+        Один раз загрузите приватный ключ и придумайте пароль.
+        Ключ сохранится в этом браузере в зашифрованном виде.
+      </p>
+      <div class="field mt">
+        <label for="setup-key">Приватный ключ (private_p256.pem)</label>
+        <textarea id="setup-key" class="mono" placeholder="-----BEGIN PRIVATE KEY-----&#10;...&#10;-----END PRIVATE KEY-----"></textarea>
+        <p class="hint">Вставьте содержимое файла или выберите его ниже.</p>
+      </div>
+      <button class="ghost" id="btn-pick-key">Выбрать файл ключа</button>
+      <input type="file" id="file-key" accept=".pem,.key,.txt" class="hidden">
+      <div class="field mt">
+        <label for="setup-pass">Пароль для ключа</label>
+        <input type="password" id="setup-pass" autocomplete="new-password" placeholder="минимум 8 символов">
+      </div>
+      <div class="field">
+        <label for="setup-pass2">Повторите пароль</label>
+        <input type="password" id="setup-pass2" autocomplete="new-password">
+      </div>
+      <button class="primary" id="btn-save-key">СОХРАНИТЬ КЛЮЧ</button>
+      <p class="status" id="setup-status"></p>
+    </div>
+  </section>
+
+  <!-- ЭКРАН 2: разблокировка -->
+  <section id="screen-unlock" class="hidden">
+    <div class="card">
+      <h2>Разблокировка</h2>
+      <p class="hint" style="margin-top:0">Введите пароль, чтобы расшифровать ключ.</p>
+      <div class="field mt">
+        <label for="unlock-pass">Пароль</label>
+        <input type="password" id="unlock-pass" autocomplete="current-password">
+      </div>
+      <button class="primary" id="btn-unlock">РАЗБЛОКИРОВАТЬ</button>
+      <p class="status" id="unlock-status"></p>
+      <button class="ghost mt" id="btn-reset">Забыл пароль — загрузить ключ заново</button>
+    </div>
+  </section>
+
+  <!-- ЭКРАН 3: выпуск -->
+  <section id="screen-main" class="hidden">
+    <div class="card">
+      <h2>Новая лицензия</h2>
+      <div class="field">
+        <label for="machine-id">ID компьютера клиента</label>
+        <input id="machine-id" class="mono" placeholder="2A33-DC8B-4E78-763A-8BF4-0A4C-9753-E901"
+               autocapitalize="characters" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="field">
+        <label for="client-name">Имя клиента</label>
+        <input id="client-name" placeholder="Иванов Иван">
+      </div>
+      <button class="primary" id="btn-issue">ВЫПУСТИТЬ ЛИЦЕНЗИЮ</button>
+      <p class="status" id="issue-status"></p>
+    </div>
+
+    <div class="card hidden" id="result-card">
+      <h2>Готовая лицензия</h2>
+      <pre class="license" id="license-text"></pre>
+      <button class="primary" id="btn-save">Скачать .key</button>
+      <div class="row mt">
+        <button class="ghost" id="btn-copy">Копировать</button>
+        <button class="ghost" id="btn-next">Ещё одну</button>
+      </div>
+      <p class="status" id="result-status"></p>
+    </div>
+
+    <div class="card">
+      <h2>Последние выдачи</h2>
+      <div id="log-list" class="hint">Пока пусто.</div>
+      <button class="ghost mt" id="btn-lock">Заблокировать ключ</button>
+    </div>
+  </section>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
